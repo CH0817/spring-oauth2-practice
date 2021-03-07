@@ -1,0 +1,33 @@
+server:
+  port: 8880
+security:
+  oauth2:
+    client:
+      # 註冊 client 回調網址
+      registered-redirect-uri: https://www.google.com
+      # client id
+      client-id: oauth
+      # client 密鑰
+      client-secret: oauth
+      # 授權範圍
+      scope: all
+      # token 有效時間
+      access-token-validity-seconds: 6000
+      # 刷新 token 有效時間
+      refresh-token-validity-seconds: 6000
+      # 允許的授權模式
+      authorized-grant-types:
+        - authorization_code
+        - password
+        - refresh_token
+      # 授權後可用的 resource id
+      resource-ids:
+        - oauth-resource
+    authorization:
+      # 允許使用 /oauth/check_token 端點
+      check-token-access: isAuthenticated()
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG

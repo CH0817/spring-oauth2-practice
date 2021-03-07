@@ -1,0 +1,13 @@
+server:
+  port: 8888
+security:
+  oauth2:
+    resource:
+      # resource id
+      id: oauth-resource
+      token-info-uri: http://localhost:8880/oauth/check_token
+    client:
+      # client id
+      client-id: oauth
+      # client 密鑰
+      client-secret: oauth

@@ -1,0 +1,19 @@
+server:
+  port: 8880
+spring:
+  datasource:
+    url: jdbc:h2:mem:my_practice
+    driver-class-name: org.h2.Driver
+    username: rex
+    password: 1
+    schema: classpath:sql/schema.sql
+    data: classpath:sql/client.sql
+    sql-script-encoding: UTF-8
+  h2:
+    console:
+      enabled: on
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
