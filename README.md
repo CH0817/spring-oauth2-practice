@@ -48,6 +48,10 @@ http://localhost:8880/oauth/token (post)，參數如下
 2. refresh_token = 請求 token 時給的 refresh token
 3. 須在 header 攜帶 client id 與 client secure
 
+## Postman
+
+可用 Postman Version 8.2.3 匯入 Spring Security OAuth2 practice.postman_collection.json 查看請求範例
+
 ## 參考
 
 - [Spring Security Oauth2 从零到一完整实践（一）](https://echocow.cn/articles/2019/07/14/1563082088646.html)

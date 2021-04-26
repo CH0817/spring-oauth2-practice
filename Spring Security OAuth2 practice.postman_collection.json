@@ -1,0 +1,311 @@
+{
+	"info": {
+		"_postman_id": "82341d0a-0b30-4c4c-9368-d4b0acaf6a8d",
+		"name": "Spring Security OAuth2 practice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "請求 code (需用 browser)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8880/oauth/authorize?response_type=code&client_id=oauth&redirect_uri=https://www.google.com&scope=all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"oauth",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "response_type",
+							"value": "code",
+							"description": "固定"
+						},
+						{
+							"key": "client_id",
+							"value": "oauth",
+							"description": "自定義"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://www.google.com",
+							"description": "自定義"
+						},
+						{
+							"key": "scope",
+							"value": "all",
+							"description": "自定義"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "請求令牌(授權碼模式)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "oauth",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "oauth",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"description": "固定",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "https://www.google.com",
+							"description": "自定義",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "oauth",
+							"description": "自定義",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "1yZFOn",
+							"description": "Authorization server 回傳",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "all",
+							"description": "自定義",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8880/oauth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"oauth",
+						"token"
+					]
+				},
+				"description": "spring security 預設使用 basic auth"
+			},
+			"response": []
+		},
+		{
+			"name": "請求令牌(密碼模式)",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "oauth",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "oauth",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "password",
+							"description": "固定",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "rex",
+							"description": "帳號",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1",
+							"description": "密碼",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "all",
+							"description": "自定義",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8880/oauth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "請求資源",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "axSQqIc7v8ZVYFdtcKLji6baYDg=",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8888/resource/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8888",
+					"path": [
+						"resource",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "檢查 token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "oauth",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "oauth",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "token",
+							"value": "PrM3HyaKYX7c8c3/6TJinZDCCTY=",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8880/oauth/check_token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"oauth",
+						"check_token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "刷新 token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "oauth",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "oauth",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "refresh_token",
+							"value": "WyhB12rK1pRuB72nhDyb06aT8fk=",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8880/oauth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8880",
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
