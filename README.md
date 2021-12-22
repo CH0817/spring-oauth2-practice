@@ -54,9 +54,9 @@ http://localhost:8880/oauth/token (post)，參數如下
 
 ## 參考
 
-- [Spring Security Oauth2 从零到一完整实践（一）](https://echocow.cn/articles/2019/07/14/1563082088646.html)
-- [Spring Security Oauth2 从零到一完整实践（二）自动配置实现](https://echocow.cn/articles/2019/07/14/1563082247386.html)
-- [Spring Security Oauth2 从零到一完整实践（三）授权服务器配置](https://echocow.cn/articles/2019/07/14/1563096109753.html)
-- [Spring Security Oauth2 从零到一完整实践（四）资源服务器配置](https://echocow.cn/articles/2019/07/20/1563611848587.html)
-- [Spring Security Oauth2 从零到一完整实践（五）自定义授权模式（手机、邮箱等）](https://echocow.cn/articles/2019/07/30/1564498598952.html)
-- [Spring Security Oauth2 从零到一完整实践（六）踩坑记录](https://echocow.cn/articles/2020/01/20/1579503807596.html)  
+- [Spring Security Oauth2 从零到一完整实践（一）](https://zyue.wiki/articles/2019/07/14/1563082088646.html)
+- [Spring Security Oauth2 从零到一完整实践（二）自动配置实现](https://zyue.wiki/articles/2019/07/14/1563082247386.html)
+- [Spring Security Oauth2 从零到一完整实践（三）授权服务器配置](https://zyue.wiki/articles/2019/07/14/1563096109753.html)
+- [Spring Security Oauth2 从零到一完整实践（四）资源服务器配置](https://zyue.wiki/articles/2019/07/20/1563611848587.html)
+- [Spring Security Oauth2 从零到一完整实践（五）自定义授权模式（手机、邮箱等）](https://zyue.wiki/articles/2019/07/30/1564498598952.html)
+- [Spring Security Oauth2 从零到一完整实践（六）踩坑记录](https://zyue.wiki/articles/2020/01/20/1579503807596.html)  
