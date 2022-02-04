@@ -97,7 +97,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
         granters.add(new CustomTokenGranter(endpoints.getTokenServices(),
                                             endpoints.getClientDetailsService(),
                                             endpoints.getOAuth2RequestFactory(),
-                                            "custom"));
+                                            "custom", authenticationManager));
         return new CompositeTokenGranter(granters);
     }
 

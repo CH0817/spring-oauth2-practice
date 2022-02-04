@@ -1,9 +1,12 @@
 package tw.com.rex.oauth2.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -22,6 +25,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private CustomAuthenticationSecurityConfig customAuthenticationSecurityConfig;
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
+
     /**
      * 加密工具
      *
@@ -33,8 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(authenticationProvider).authenticationProvider(customAuthenticationProvider);
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http//.apply(customAuthenticationSecurityConfig).and()
+            .csrf().disable()
             .headers().frameOptions().sameOrigin()
             .and()
             .authorizeRequests().antMatchers("/actuator/**").permitAll()
