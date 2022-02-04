@@ -12,8 +12,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Rex Yu
@@ -39,8 +45,8 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .secret("$2a$10$EyohJlLTb7tx/TkVBOXc2eojIayx3Jz1IwUUNfi8CTKKWk5trzsoS")
                 // 授權後可用的 resource id
                 .resourceIds("oauth-resource")
-                // 可用的授權模式
-                .authorizedGrantTypes("authorization_code", "password", "refresh_token")
+                // 可用的授權模式，custom 為自定義授權模式
+                .authorizedGrantTypes("authorization_code", "password", "custom", "refresh_token")
                 // 可授權的角色
                 .authorities("ROLE_ADMIN", "ROLE_USER")
                 // 授權範圍
@@ -60,7 +66,8 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 // 不加這段無法刷新 token
                 .userDetailsService(userDetailsService)
-                .tokenStore(redisTokenStore());
+                .tokenStore(redisTokenStore())
+                .tokenGranter(tokenGranter(endpoints));
     }
 
     @Override
@@ -77,6 +84,21 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public TokenStore redisTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
+    }
+
+    /**
+     * 增加自定義授權模式
+     *
+     * @param endpoints AuthorizationServerEndpointsConfigurer
+     * @return TokenGranter
+     */
+    private TokenGranter tokenGranter(final AuthorizationServerEndpointsConfigurer endpoints) {
+        List<TokenGranter> granters = new ArrayList<>(Collections.singletonList(endpoints.getTokenGranter()));
+        granters.add(new CustomTokenGranter(endpoints.getTokenServices(),
+                                            endpoints.getClientDetailsService(),
+                                            endpoints.getOAuth2RequestFactory(),
+                                            "custom"));
+        return new CompositeTokenGranter(granters);
     }
 
 }
