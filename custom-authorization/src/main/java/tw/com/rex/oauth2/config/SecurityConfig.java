@@ -18,11 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    /**
-     * 加密工具
-     *
-     * @return PasswordEncoder
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -31,40 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-            .headers().frameOptions().sameOrigin()
-            .and()
+            .cors().disable()
             .authorizeRequests().antMatchers("/actuator/**").permitAll()
-            .anyRequest().authenticated()
-            .and();
+            .anyRequest().authenticated().and();
     }
 
-    /**
-     * in memory user
-     *
-     * @return UserDetailsService
-     */
-    // 註冊為 bean 否則不能刷新 token
-    // @Bean
-    // @Override
-    // public UserDetailsService userDetailsServiceBean() {
-    //     InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-    //     manager.createUser(getDefaultUser());
-    //     return manager;
-    // }
-    //
-    // /**
-    //  * create user
-    //  *
-    //  * @return UserDetails
-    //  */
-    // private UserDetails getDefaultUser() {
-    //     return User.withUsername("rex")
-    //                .password(passwordEncoder().encode("1"))
-    //                .authorities("ROLE_USER")
-    //                .build();
-    // }
-
-    // 註冊為 bean 否則密碼模式無法使用
+    // 註冊為 bean 否則自定義模式無法使用
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

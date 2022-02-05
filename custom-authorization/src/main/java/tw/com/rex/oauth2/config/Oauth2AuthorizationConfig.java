@@ -1,11 +1,10 @@
 package tw.com.rex.oauth2.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -24,16 +23,13 @@ import java.util.List;
 /**
  * @author Rex Yu
  */
+@AllArgsConstructor
 @Configuration
 @EnableAuthorizationServer
 public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
+    private final AuthenticationManager authenticationManager;
+    private final RedisConnectionFactory redisConnectionFactory;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -62,10 +58,8 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
-                // 不加這段密碼模式無法使用
+                // 不加這段自定義模式無法使用
                 .authenticationManager(authenticationManager)
-                // 不加這段無法刷新 token
-                .userDetailsService(userDetailsService)
                 .tokenStore(redisTokenStore())
                 .tokenGranter(tokenGranter(endpoints));
     }

@@ -1,8 +1,6 @@
 package tw.com.rex.oauth2.config;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.*;
@@ -35,16 +33,14 @@ public class CustomTokenGranter extends AbstractTokenGranter {
         if (!StringUtils.hasText(ssoToken)) {
             throw new InvalidGrantException("請求未包含 SSO-TOKEN 參數");
         }
-        AbstractAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(null, ssoToken);
-        userAuth.setDetails(parameters);
-        // CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(ssoToken);
+        CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(ssoToken);
         // 沒有這段 CustomAuthenticationProvider 不會起作用
-        Authentication authenticate = authenticationManager.authenticate(userAuth);
+        Authentication authenticate = authenticationManager.authenticate(customAuthenticationToken);
         if (Objects.isNull(authenticate)) {
             throw new InvalidGrantException("sso token 驗證失敗");
         }
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
-        return new OAuth2Authentication(storedOAuth2Request, userAuth);
+        return new OAuth2Authentication(storedOAuth2Request, customAuthenticationToken);
     }
 
 }

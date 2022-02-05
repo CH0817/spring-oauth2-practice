@@ -13,18 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String casToken = (String) authentication.getCredentials();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(casToken);
+        UserDetails userDetails = userDetailsService.loadUserBySsoToken(casToken);
         return new UsernamePasswordAuthenticationToken(userDetails, casToken, userDetails.getAuthorities());
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(aClass);
+        return CustomAuthenticationToken.class.isAssignableFrom(aClass);
     }
 
 }
