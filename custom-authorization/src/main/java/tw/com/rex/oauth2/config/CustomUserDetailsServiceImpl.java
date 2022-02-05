@@ -2,14 +2,15 @@ package tw.com.rex.oauth2.config;
 
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomUserDetailsServiceImpl implements CustomUserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
-    public UserDetails loadUserDetailsByCasToken(String jwtToken) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String jwtToken) throws UsernameNotFoundException {
         CustomUserDetails userDetails = new CustomUserDetails();
         userDetails.setUserId("cn");
         userDetails.setUsername("sn");

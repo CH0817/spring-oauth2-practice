@@ -46,7 +46,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 // 授權後可用的 resource id
                 .resourceIds("oauth-resource")
                 // 可用的授權模式，custom 為自定義授權模式
-                .authorizedGrantTypes("authorization_code", "password", "custom", "refresh_token")
+                .authorizedGrantTypes("client_credentials", "custom")
                 // 可授權的角色
                 .authorities("ROLE_ADMIN", "ROLE_USER")
                 // 授權範圍

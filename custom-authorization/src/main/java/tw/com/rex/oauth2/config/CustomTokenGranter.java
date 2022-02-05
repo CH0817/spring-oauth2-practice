@@ -1,6 +1,8 @@
 package tw.com.rex.oauth2.config;
 
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.*;
@@ -8,6 +10,8 @@ import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.util.StringUtils;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -26,18 +30,21 @@ public class CustomTokenGranter extends AbstractTokenGranter {
 
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
-        String ssoToken = tokenRequest.getRequestParameters().get("SSO-TOKEN");
+        Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
+        String ssoToken = parameters.get("SSO-TOKEN");
         if (!StringUtils.hasText(ssoToken)) {
             throw new InvalidGrantException("請求未包含 SSO-TOKEN 參數");
         }
-        CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(ssoToken);
+        AbstractAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(null, ssoToken);
+        userAuth.setDetails(parameters);
+        // CustomAuthenticationToken customAuthenticationToken = new CustomAuthenticationToken(ssoToken);
         // 沒有這段 CustomAuthenticationProvider 不會起作用
-        Authentication authenticate = authenticationManager.authenticate(customAuthenticationToken);
+        Authentication authenticate = authenticationManager.authenticate(userAuth);
         if (Objects.isNull(authenticate)) {
             throw new InvalidGrantException("sso token 驗證失敗");
         }
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);
-        return new OAuth2Authentication(storedOAuth2Request, customAuthenticationToken);
+        return new OAuth2Authentication(storedOAuth2Request, userAuth);
     }
 
 }
