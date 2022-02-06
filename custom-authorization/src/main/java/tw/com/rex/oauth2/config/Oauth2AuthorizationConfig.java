@@ -1,10 +1,11 @@
 package tw.com.rex.oauth2.config;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -23,13 +24,16 @@ import java.util.List;
 /**
  * @author Rex Yu
  */
-@AllArgsConstructor
 @Configuration
 @EnableAuthorizationServer
 public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
-    private final AuthenticationManager authenticationManager;
-    private final RedisConnectionFactory redisConnectionFactory;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -42,7 +46,7 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
                 // 授權後可用的 resource id
                 .resourceIds("oauth-resource")
                 // 可用的授權模式，custom 為自定義授權模式
-                .authorizedGrantTypes("client_credentials", "custom")
+                .authorizedGrantTypes("password", "client_credentials", "custom")
                 // 可授權的角色
                 .authorities("ROLE_ADMIN", "ROLE_USER")
                 // 授權範圍
@@ -58,8 +62,10 @@ public class Oauth2AuthorizationConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints
-                // 不加這段自定義模式無法使用
+                // 不加這段密碼、自定義模式無法使用
                 .authenticationManager(authenticationManager)
+                // 不加這段密碼模式無法使用
+                .userDetailsService(userDetailsService)
                 .tokenStore(redisTokenStore())
                 .tokenGranter(tokenGranter(endpoints));
     }
