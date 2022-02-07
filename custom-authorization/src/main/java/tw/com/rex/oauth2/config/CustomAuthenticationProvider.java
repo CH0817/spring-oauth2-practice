@@ -2,7 +2,6 @@ package tw.com.rex.oauth2.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String casToken = (String) authentication.getCredentials();
         UserDetails userDetails = userDetailsService.loadUserBySsoToken(casToken);
-        return new UsernamePasswordAuthenticationToken(userDetails, casToken, userDetails.getAuthorities());
+        return new CustomAuthenticationToken(userDetails, casToken, userDetails.getAuthorities());
     }
 
     @Override
